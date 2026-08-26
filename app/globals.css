@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F6ECDF;
+  --foreground: #3F362E;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Surfaces */
+  --color-surface: #FFFDF9;
+  --color-border: #ECE0D0;
+
+  /* Acentos cálidos */
+  --color-accent: #D9583C;
+  --color-accent-warm: #F2937A;
+  --color-accent-orange: #EE8164;
+
+  /* Roles por tipo */
+  --color-staff: #2E89A6;
+  --color-achievement: #3E9B6C;
+  --color-announcement: #4E72C8;
+
+  /* Tipografía */
+  --font-sans: var(--font-nunito);
+  --font-headings: var(--font-fredoka);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E4D6C4;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
 }

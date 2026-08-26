@@ -40,3 +40,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - /spec-impl Usaremos este skill para hacer las implementaciones
 
 
+## Reglas de codigo
+
+- Usar codigo limpio, nombres, funciones, variables, etc en ingles.
