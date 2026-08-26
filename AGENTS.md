@@ -36,9 +36,33 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - context7: usar para traer documentación actualizada de Next.js / Tailwind antes de escribir código.
 
 ## Spec Driven Development - Skills
-- /spec Usaremos esta habilidad para crear las especificaciones
-- /spec-impl Usaremos este skill para hacer las implementaciones
+- `/spec` — Usaremos esta habilidad para crear las especificaciones
+- `/spec-impl` — Usaremos este skill para hacer las implementaciones
+- `/spec-verifier` — Agente para verificar criterios de aceptación de un spec. Revisa el código, compara screenshots con Playwright + vision, valida buenas prácticas con Context7, y marca los checkboxes del spec.
 
+## Commands
+
+### Verify Spec
+
+Para verificar un spec implementado, usa el agente `spec-verifier`:
+
+```
+/spec-verifier specs/NN-slug.md
+```
+
+Ejemplos:
+- `/spec-verifier specs/01-feed-home.md`
+- `/spec-verifier 01`
+- `/spec-verifier 01-home-feed`
+
+El agente:
+1. Lee el spec y extrae los criterios de aceptación
+2. Navega la app con Playwright y toma screenshots
+3. Compara visualmente con `references/screenshots/` usando vision
+4. Valida prácticas de Next.js 16 con Context7
+5. Corre `npm run lint` y typecheck
+6. Revisa errores de consola
+7. Marca `[x]`/`[ ]` en el spec y fija problemas de código
 
 ## Reglas de codigo
 
