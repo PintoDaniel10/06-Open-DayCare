@@ -373,12 +373,12 @@ Convenciones:
 
 ## Acceptance criteria
 
-- [ ] `http://localhost:3000/kids` renderiza la lista de niños con el mismo diseño que `ninos.dc.html`.
-- [ ] El sidebar muestra `Niños` como activo cuando se está en `/kids` o `/kids/[id]`.
-- [ ] El sidebar muestra `Feed` como activo cuando se está en `/`.
-- [ ] El buscador filtra niños por nombre en tiempo real (frontend, sin backend).
-- [ ] Se muestran 8 niños en un grid de 2 columnas.
-- [ ] Cada tarjeta muestra avatar con inicial, nombre, edad, padres vinculados, y badge de alergia o flecha o `VINCULAR`.
+- [x] `http://localhost:3000/kids` renderiza la lista de niños con el mismo diseño que `ninos.dc.html`.
+- [x] El sidebar muestra `Niños` como activo cuando se está en `/kids` o `/kids/[id]`.
+- [x] El sidebar muestra `Feed` como activo cuando se está en `/`.
+- [x] El buscador filtra niños por nombre en tiempo real (frontend, sin backend).
+- [x] Se muestran 8 niños en un grid de 2 columnas.
+- [x] Cada tarjeta muestra avatar con inicial, nombre, edad, padres vinculados, y badge de alergia o flecha o `VINCULAR`.
 - [x] Hover en tarjeta produce `translateY(-2px)` y cambio de borde.
 - [x] Click en una tarjeta navega a `/kids/[id]`.
 - [x] `http://localhost:3000/kids/mateo-fernandez` renderiza el perfil con el mismo diseño que `perfil-nino.dc.html`.

@@ -5,6 +5,7 @@ import { kids } from "@/app/_data/kids";
 import MobileNav from "@/components/shared/MobileNav";
 import Sidebar from "@/components/shared/Sidebar";
 import KidCard from "@/components/kids/KidCard";
+import Link from "next/link";
 import { PlusIcon, SearchIcon } from "@/components/shared/icons";
 
 function normalize(str: string) {
@@ -33,13 +34,13 @@ export default function KidsPage() {
                 Niños
               </h1>
             </div>
-            <a
-              href="#"
+            <Link
+              href="/agregar-nino"
               className="flex items-center gap-2 p-[11px_18px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[14.5px] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)]"
             >
               <PlusIcon className="w-[17px] h-[17px]" />
               Agregar niño
-            </a>
+            </Link>
           </div>
 
           <div className="flex items-center gap-[11px] bg-surface border border-[#ECE0D0] rounded-[14px] p-3 mb-[22px]">

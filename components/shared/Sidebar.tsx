@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { navItems, sidebarUser } from "@/app/_data/mock";
 import type { NavIcon } from "@/app/_data/mock";
@@ -20,6 +21,13 @@ const NAV_ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   user: UserIcon,
 };
 
+const NAV_HREF: Record<NavIcon, string> = {
+  home: "/",
+  kids: "/kids",
+  bell: "/avisos",
+  user: "/mi-cuenta",
+};
+
 interface SidebarContentProps {
   activeNav?: NavIcon | null;
 }
@@ -27,8 +35,8 @@ interface SidebarContentProps {
 export function SidebarContent({ activeNav }: SidebarContentProps) {
   return (
     <div className="flex flex-col h-full py-6 px-4">
-      <a
-        href="#"
+      <Link
+        href="/"
         className="flex items-center gap-[11px] pt-1 px-2 pb-[22px]"
       >
         <span className="flex-none w-[38px] h-[38px] rounded-[12px] flex items-center justify-center text-white bg-[linear-gradient(155deg,#F8C3A8,#F2937A)]">
@@ -42,15 +50,15 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
             Sala Soles
           </span>
         </span>
-      </a>
+      </Link>
 
-      <a
-        href="#"
+      <Link
+        href="/crear-publicacion"
         className="flex items-center justify-center gap-2 w-full p-3 rounded-[14px] mb-[18px] text-white font-extrabold text-[14.5px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)]"
       >
         <PlusIcon className="w-[17px] h-[17px]" />
         Nueva publicación
-      </a>
+      </Link>
 
       <nav className="flex flex-col gap-1 flex-1">
         {navItems.map((item) => {
@@ -58,10 +66,11 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
             ? activeNav === item.icon
             : item.active;
           const Icon = NAV_ICONS[item.icon];
+          const href = NAV_HREF[item.icon];
           return (
-            <a
+            <Link
               key={item.label}
-              href="#"
+              href={href}
               aria-current={isActive ? "page" : undefined}
               className={
                 "flex items-center gap-3 px-3 py-[11px] rounded-[12px] text-[14.5px] " +
@@ -72,7 +81,7 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
             >
               <Icon className="w-[19px] h-[19px]" />
               {item.label}
-            </a>
+            </Link>
           );
         })}
       </nav>
@@ -90,13 +99,13 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
               {sidebarUser.role}
             </span>
           </span>
-          <a
-            href="#"
+          <Link
+            href="/login"
             title="Cerrar sesión"
             className="flex-none w-8 h-8 rounded-[10px] flex items-center justify-center bg-background text-[#94887B]"
           >
             <LogoutIcon className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,15 +1,16 @@
 import Link from "next/link";
-import { getKidById, ALLERGY_BADGE, PARENT_STATUS_BADGE, PARENT_STATUS_LABEL } from "@/app/_data/kids";
+import { getKidById, PARENT_STATUS_BADGE, PARENT_STATUS_LABEL } from "@/app/_data/kids";
 import MobileNav from "@/components/shared/MobileNav";
 import Sidebar from "@/components/shared/Sidebar";
 import { ChevronLeftIcon, AlertTriangleIcon, EditIcon, PlusIcon, SunLogo } from "@/components/shared/icons";
 
 interface KidProfileProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function KidProfile({ params }: KidProfileProps) {
-  const kid = getKidById(params.id);
+export default async function KidProfile({ params }: KidProfileProps) {
+  const { id } = await params;
+  const kid = getKidById(id);
 
   if (!kid) {
     return (
@@ -84,13 +85,13 @@ export default function KidProfile({ params }: KidProfileProps) {
                     {kid.age} años · Sala {kid.room}
                   </p>
                 </div>
-                <a
-                  href="#"
+                <Link
+                  href={`/kids/${kid.id}/editar`}
                   className="border border-solid border-[#ECE0D0] bg-surface text-[#6E6359] font-bold text-[14px] p-[9px_16px] rounded-[12px] flex items-center gap-2"
                 >
                   <EditIcon className="w-[16px] h-[16px]" />
                   Editar
-                </a>
+                </Link>
               </div>
 
               {/* Alergias y notas */}
@@ -141,13 +142,13 @@ export default function KidProfile({ params }: KidProfileProps) {
             {/* Columna derecha */}
             <div className="w-[300px] flex-none flex flex-col gap-[14px]">
               {/* Resumen del día */}
-              <a
-                href="#"
+              <Link
+                href={`/kids/${kid.id}/resumen-dia`}
                 className="flex items-center justify-center gap-[9px] w-full p-[13px] rounded-[14px] bg-[#3F362E] text-white font-extrabold text-[15px]"
               >
                 <SunLogo className="w-[18px] h-[18px]" />
                 Resumen del día
-              </a>
+              </Link>
 
               {/* Padres vinculados */}
               <div className="bg-surface border border-[#ECE0D0] rounded-[16px] p-[16px_18px]">
@@ -198,7 +199,7 @@ export default function KidProfile({ params }: KidProfileProps) {
                       </span>
                     </div>
                   ))}
-                  <a href="#" className="flex items-center gap-[12px] pt-2">
+                  <Link href={`/kids/${kid.id}/vincular-padre`} className="flex items-center gap-[12px] pt-2">
                     <span
                       className="w-[40px] h-[40px] rounded-[50%] border border-dashed border-[#D8CBBA] flex items-center justify-center text-[#B0A290]"
                     >
@@ -207,7 +208,7 @@ export default function KidProfile({ params }: KidProfileProps) {
                     <span className="font-extrabold text-[14.5px] text-[#C5503A]">
                       Vincular otro padre
                     </span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
