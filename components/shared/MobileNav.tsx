@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { SidebarContent } from "./Sidebar";
+import type { NavIcon } from "@/app/_data/mock";
 import { CloseIcon, MenuIcon } from "./icons";
 
-export default function MobileNav() {
+interface MobileNavProps {
+  activeNav?: NavIcon | null;
+}
+
+export default function MobileNav({ activeNav }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -47,7 +52,7 @@ export default function MobileNav() {
         >
           <CloseIcon className="w-5 h-5" />
         </button>
-        <SidebarContent />
+        <SidebarContent activeNav={activeNav} />
       </aside>
     </>
   );

@@ -23,6 +23,17 @@
   --color-achievement: #3E9B6C;
   --color-announcement: #4E72C8;
 
+  /* Badges de alergia */
+  --color-allergy-warm: #FBD8CC;
+  --color-allergy-pink: #F9D2DE;
+
+  /* Estado de padres */
+  --color-parent-active: #CFEBD8;
+  --color-parent-pending: #F7E7A6;
+
+  /* Fondo del form */
+  --color-canvas-warm: #FBF4EC;
+
   /* Tipografía */
   --font-sans: var(--font-nunito);
   --font-headings: var(--font-fredoka);

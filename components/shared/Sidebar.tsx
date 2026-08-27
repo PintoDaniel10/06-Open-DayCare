@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentType, SVGProps } from "react";
 import { navItems, sidebarUser } from "@/app/_data/mock";
 import type { NavIcon } from "@/app/_data/mock";
@@ -18,7 +20,11 @@ const NAV_ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   user: UserIcon,
 };
 
-export function SidebarContent() {
+interface SidebarContentProps {
+  activeNav?: NavIcon | null;
+}
+
+export function SidebarContent({ activeNav }: SidebarContentProps) {
   return (
     <div className="flex flex-col h-full py-6 px-4">
       <a
@@ -48,15 +54,18 @@ export function SidebarContent() {
 
       <nav className="flex flex-col gap-1 flex-1">
         {navItems.map((item) => {
+          const isActive = activeNav !== null && activeNav !== undefined
+            ? activeNav === item.icon
+            : item.active;
           const Icon = NAV_ICONS[item.icon];
           return (
             <a
               key={item.label}
               href="#"
-              aria-current={item.active ? "page" : undefined}
+              aria-current={isActive ? "page" : undefined}
               className={
                 "flex items-center gap-3 px-3 py-[11px] rounded-[12px] text-[14.5px] " +
-                (item.active
+                (isActive
                   ? "bg-[#FBE3D8] text-accent font-extrabold"
                   : "text-[#6E6359] font-semibold")
               }
@@ -94,10 +103,14 @@ export function SidebarContent() {
   );
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  activeNav?: NavIcon | null;
+}
+
+export default function Sidebar({ activeNav }: SidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-[248px] flex-none bg-surface border-r border-[#ECE0D0] sticky top-0 h-screen">
-      <SidebarContent />
+      <SidebarContent activeNav={activeNav} />
     </aside>
   );
 }

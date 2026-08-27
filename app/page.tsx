@@ -9,8 +9,8 @@ import Sidebar from "@/components/shared/Sidebar";
 export default function Home() {
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      <MobileNav />
+      <Sidebar activeNav="home" />
+      <MobileNav activeNav="home" />
       <main className="flex-1 min-w-0 h-screen overflow-y-auto">
         <div className="max-w-[760px] w-full mx-auto pt-[64px] px-5 pb-[80px] md:pt-[34px] md:px-[40px]">
           <FeedHeader />
