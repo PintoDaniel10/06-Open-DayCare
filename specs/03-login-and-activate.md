@@ -1,6 +1,6 @@
 # SPEC 03 — Login y activar cuenta (calco de login.dc.html + activar-cuenta.dc.html)
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depende de:** Spec 01 (home-feed) — reutiliza tokens CSS, fuentes y paleta existentes
 > **Fecha:** 2026-07-06
 > **Objetivo:** Implementar las páginas `(auth)/login` y `(auth)/activate` como calco visual de `login.dc.html` y `activar-cuenta.dc.html` sin lógica de autenticación ni navegación funcional, agrupadas bajo un route group `(auth)` en Next.js.
@@ -83,20 +83,19 @@ No introduce datos nuevos. Todo es estático y visual. Los inputs tienen valores
 
 ## Acceptance criteria
 
-- [ ] `http://localhost:3000/login` renderiza el layout de dos columnas con el mismo diseño que `login.dc.html` (ruta `(auth)/login`).
-- [ ] El panel izquierdo muestra gradiente, logo `OpenDayCare`, tagline, subtítulo y `Guardería Sala Soles`.
-- [ ] El panel derecho muestra h2 `Iniciar sesión`, subtítulo, botones Personal/Familia, inputs email y contraseña, link forgot password, botón `Iniciar sesión`.
-- [ ] Los botones Personal y Familia son puramente visuales (no cambian estado ni navegan).
-- [ ] El link `¿Olvidaste tu contraseña?` es visual sin acción.
-- [ ] El link `Activá tu cuenta` navega a `/activate`.
-- [ ] `http://localhost:3000/activate` renderiza el layout centrado con el mismo diseño que `activar-cuenta.dc.html` (ruta `(auth)/activate`).
-- [ ] La página de activación muestra logo, h1, subtítulo, tarjeta de invitación, inputs (código, email, contraseña), checkbox pre-marcado, botón `Activar mi cuenta`.
-- [ ] El checkbox de autorización de fotos es visual (pre-marcado, sin lógica).
-- [ ] El link `Iniciar sesión` en `/activate` navega a `/login`.
-- [ ] Las fuentes Fredoka y Nunito se usan correctamente en headings y cuerpo.
-- [ ] `npm run lint` pasa sin errores.
-- [ ] `npx tsc --noEmit` pasa sin errores.
-- [ ] No hay errores en la consola del navegador al cargar ambas páginas.
+- [x] `http://localhost:3000/login` renderiza el layout de dos columnas con el mismo diseño que `login.dc.html` (ruta `(auth)/login`).
+- [x] El panel izquierdo muestra gradiente, logo `OpenDayCare`, tagline, subtítulo y `Guardería Sala Soles`.
+- [x] El panel derecho muestra h2 `Iniciar sesión`, subtítulo, inputs email y contraseña, link forgot password, botón `Iniciar sesión`.
+- [x] El link `¿Olvidaste tu contraseña?` es visual sin acción.
+- [x] El link `Activá tu cuenta` navega a `/activate`.
+- [x] `http://localhost:3000/activate` renderiza el layout centrado con el mismo diseño que `activar-cuenta.dc.html` (ruta `(auth)/activate`).
+- [x] La página de activación muestra logo, h1, subtítulo, tarjeta de invitación, inputs (código, email, contraseña), checkbox pre-marcado, botón `Activar mi cuenta`.
+- [x] El checkbox de autorización de fotos es visual (pre-marcado, sin lógica).
+- [x] El link `Iniciar sesión` en `/activate` navega a `/login`.
+- [x] Las fuentes Fredoka y Nunito se usan correctamente en headings y cuerpo.
+- [x] `npm run lint` pasa sin errores.
+- [x] `npx tsc --noEmit` pasa sin errores.
+- [x] No hay errores en la consola del navegador al cargar ambas páginas.
 
 ## Decisions
 
