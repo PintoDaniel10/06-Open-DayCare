@@ -1,6 +1,6 @@
 # SPEC 05 — Modal de vincular padre (calco de vincular-padre.dc.html como dialog)
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depende de:** SPEC 02 (kids-list-and-profile) — reutiliza data model de `kids.ts`, tipos `LinkedParent`, `ParentStatus`, tokens CSS y la página `/kids/[id]`
 > **Fecha:** 2026-07-07
 > **Objetivo:** Implementar un modal dialog overlay para vincular un padre/madre/tutor a un niño desde la página `/kids/[id]`, replicando el diseño de `vincular-padre.dc.html` con validación de nombre y email, y al enviar agregar un padre "pendiente" al mock del niño.
@@ -88,24 +88,24 @@ Helper nuevo en `app/_data/kids.ts`:
 
 ## Acceptance criteria
 
-- [ ] El botón "Vincular otro padre" en `/kids/[id]` abre un modal overlay (no navega a otra ruta).
-- [ ] El modal muestra un backdrop oscuro semitransparente detrás del formulario.
-- [ ] Click en el backdrop cierra el modal.
-- [ ] Presionar `Esc` cierra el modal.
-- [ ] El header del modal muestra `Vincular padre` (Fredoka), subtítulo `a {nombre del niño}`, y botón X de cierre.
-- [ ] Click en el botón X cierra el modal.
-- [ ] El banner informativo azul muestra el texto "Le enviaremos un correo con un código para que active su cuenta. Solo verá el feed de {nombre del niño}."
-- [ ] El formulario tiene los campos: nombre del padre/madre, email, parentesco (3 botones), código de invitación.
-- [ ] El input de email valida formato con regex y muestra error si es inválido.
-- [ ] Los 3 botones de parentesco funcionan como toggle (solo uno seleccionado a la vez).
-- [ ] El código de invitación muestra `7K4P9` hardcodeado con texto "Vence en 7 días".
-- [ ] Al intentar enviar con nombre vacío, se muestra un mensaje de error debajo del campo.
-- [ ] Al intentar enviar con email vacío o inválido, se muestra un mensaje de error debajo del campo.
-- [ ] Al enviar con todos los campos válidos, el modal se cierra y el nuevo padre aparece en la lista de PADRES VINCULADOS con estado PENDIENTE.
-- [ ] El padre agregado tiene avatar con inicial, rol correcto y badge `PENDIENTE`.
-- [ ] `npm run lint` pasa sin errores.
-- [ ] `npx tsc --noEmit` pasa sin errores.
-- [ ] No hay errores en la consola del navegador al abrir y cerrar el modal.
+- [x] El botón "Vincular otro padre" en `/kids/[id]` abre un modal overlay (no navega a otra ruta).
+- [x] El modal muestra un backdrop oscuro semitransparente detrás del formulario.
+- [x] Click en el backdrop cierra el modal.
+- [x] Presionar `Esc` cierra el modal.
+- [x] El header del modal muestra `Vincular padre` (Fredoka), subtítulo `a {nombre del niño}`, y botón X de cierre.
+- [x] Click en el botón X cierra el modal.
+- [x] El banner informativo azul muestra el texto "Le enviaremos un correo con un código para que active su cuenta. Solo verá el feed de {nombre del niño}."
+- [x] El formulario tiene los campos: nombre del padre/madre, email, parentesco (3 botones), código de invitación.
+- [x] El input de email valida formato con regex y muestra error si es inválido.
+- [x] Los 3 botones de parentesco funcionan como toggle (solo uno seleccionado a la vez).
+- [x] El código de invitación muestra `7K4P9` hardcodeado con texto "Vence en 7 días".
+- [x] Al intentar enviar con nombre vacío, se muestra un mensaje de error debajo del campo.
+- [x] Al intentar enviar con email vacío o inválido, se muestra un mensaje de error debajo del campo.
+- [x] Al enviar con todos los campos válidos, el modal se cierra y el nuevo padre aparece en la lista de PADRES VINCULADOS con estado PENDIENTE.
+- [x] El padre agregado tiene avatar con inicial, rol correcto y badge `PENDIENTE`.
+- [x] `npm run lint` pasa sin errores.
+- [x] `npx tsc --noEmit` pasa sin errores.
+- [x] No hay errores en la consola del navegador al abrir y cerrar el modal.
 
 ## Decisions
 

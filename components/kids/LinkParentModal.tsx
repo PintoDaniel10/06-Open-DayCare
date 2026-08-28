@@ -29,11 +29,17 @@ export default function LinkParentModal({
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") handleClose();
+      if (e.key === "Escape") {
+        setParentName("");
+        setEmail("");
+        setRole("Mamá");
+        setErrors({ parentName: "", email: "", role: "" });
+        onClose();
+      }
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
+  }, [open, onClose]);
 
   function handleClose() {
     resetForm();
@@ -79,7 +85,10 @@ export default function LinkParentModal({
   const kidFirstName = kidName.split(" ")[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
+      onClick={handleClose}
+    >
       <div
         className="w-full max-w-[480px] bg-[#FBF4EC] border border-[#ECE0D0] rounded-[24px] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
