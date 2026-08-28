@@ -283,3 +283,94 @@ export function parentCountLabel(parents: LinkedParent[]): string {
   if (n === 1) return '1 padre vinculado';
   return `${n} padres vinculados`;
 }
+
+export const AVATAR_COLORS = [
+  '#A9D9E8',
+  '#F4B8CC',
+  '#B9DEC4',
+  '#F4DC8E',
+  '#C9B6E8',
+];
+
+export function randomAvatarBg(): string {
+  return AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)];
+}
+
+export function randomAvatarColor(): string {
+  const bg = randomAvatarBg();
+  const colorMap: Record<string, string> = {
+    '#A9D9E8': '#1F7A93',
+    '#F4B8CC': '#C44A7A',
+    '#B9DEC4': '#3E8B62',
+    '#F4DC8E': '#9A7B1E',
+    '#C9B6E8': '#7B5FC0',
+  };
+  return colorMap[bg] ?? '#333333';
+}
+
+export function generateKidId(fullName: string): string {
+  return fullName
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+export function calculateAge(birthDate: string): number {
+  const parts = birthDate.split('/');
+  if (parts.length !== 3) return 0;
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const year = parseInt(parts[2], 10);
+  const birth = new Date(year, month, day);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age < 0 ? 0 : age;
+}
+
+const MONTHS_ES = [
+  'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+  'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+];
+
+export function formatBirthDateDisplay(ddmmyyyy: string): string {
+  const parts = ddmmyyyy.split('/');
+  if (parts.length !== 3) return ddmmyyyy;
+  const day = parts[0];
+  const monthIndex = parseInt(parts[1], 10) - 1;
+  const year = parts[2];
+  const month = MONTHS_ES[monthIndex] ?? '';
+  return `${day} ${month} ${year}`;
+}
+
+const ALLERGY_MAP: Record<string, AllergyType> = {
+  'mani': 'peanut',
+  'maní': 'peanut',
+  'lactosa': 'lactose',
+  'gluten': 'gluten',
+};
+
+export function parseAllergyText(text: string): AllergyType[] {
+  if (!text.trim()) return [];
+  const known = new Set<AllergyType>();
+  const items = text.split(/[,;]+/).map((s) => s.trim().toLowerCase());
+  for (const item of items) {
+    for (const [key, value] of Object.entries(ALLERGY_MAP)) {
+      if (item.includes(key)) {
+        known.add(value);
+        break;
+      }
+    }
+  }
+  return Array.from(known);
+}
+
+export function addKidToMock(kid: Kid): void {
+  kids.push(kid);
+}
