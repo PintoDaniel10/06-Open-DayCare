@@ -20,9 +20,7 @@ export default function NewPostModal({
   onClose,
   onPublish,
 }: NewPostModalProps) {
-  const [selectedTarget, setSelectedTarget] = useState<NewPostTarget | null>(
-    null
-  );
+  const [selectedTargets, setSelectedTargets] = useState<NewPostTarget[]>([]);
   const [selectedType, setSelectedType] = useState<NewPostType | null>(null);
   const [description, setDescription] = useState("");
 
@@ -46,14 +44,49 @@ export default function NewPostModal({
     onClose();
   }
 
+  const targets = getNewPostTargets();
+  const kidTargets = targets.filter(
+    (t): t is Extract<NewPostTarget, { type: "kid" }> => t.type === "kid"
+  );
+  const allTarget = targets.find((t) => t.type === "all")!;
+
   function resetForm() {
-    setSelectedTarget(null);
+    setSelectedTargets([]);
     setSelectedType(null);
     setDescription("");
   }
 
+  function toggleTarget(target: NewPostTarget) {
+    setSelectedTargets((prev) => {
+      if (target.type === "all") {
+        const isAllSelected = prev.some((t) => t.type === "all");
+        if (isAllSelected) {
+          return prev.filter((t) => t.type !== "all");
+        }
+        return [...kidTargets, allTarget];
+      }
+
+      const exists = prev.some((t) => t.type === "kid" && t.id === target.id);
+      if (exists) {
+        const remaining = prev.filter(
+          (t) => t.type === "kid" && t.id !== target.id
+        );
+        return remaining.filter((t) => t.type !== "all");
+      }
+
+      const newSelected = [...prev, target];
+      const allKidsSelected = kidTargets.every((k) =>
+        newSelected.some((s) => s.type === "kid" && s.id === k.id)
+      );
+      if (allKidsSelected) {
+        return [...newSelected, allTarget];
+      }
+      return newSelected;
+    });
+  }
+
   function handlePublish() {
-    if (selectedTarget && selectedType && description.trim()) {
+    if (selectedTargets.length > 0 && selectedType && description.trim()) {
       onPublish();
       resetForm();
     }
@@ -61,7 +94,21 @@ export default function NewPostModal({
 
   if (!open) return null;
 
-  const targets = getNewPostTargets();
+  const isTargetSelected = (target: NewPostTarget) => {
+    if (target.type === "all") {
+      const allKidsSelected = kidTargets.every((k) =>
+        selectedTargets.some((t) => t.type === "kid" && t.id === k.id)
+      );
+      return allKidsSelected;
+    }
+    return selectedTargets.some(
+      (t) => t.type === "kid" && t.id === (target as Extract<NewPostTarget, { type: "kid" }>).id
+    );
+  };
+
+  function targetKey(target: NewPostTarget): string {
+    return target.type === "all" ? "all" : (target as Extract<NewPostTarget, { type: "kid" }>).id;
+  }
 
   return (
     <div
@@ -92,32 +139,12 @@ export default function NewPostModal({
             PARA
           </div>
           <div className="flex flex-wrap gap-2.5 mb-5">
-            {targets.map((target) => {
-              const isSelected =
-                target.type === "all"
-                  ? selectedTarget?.type === "all"
-                  : selectedTarget?.type === "kid" && selectedTarget.id === target.id;
-
-              if (target.type === "all") {
-                return (
-                  <button
-                    key="all"
-                    onClick={() => setSelectedTarget(target)}
-                    className={`px-4 py-1.5 rounded-full border-[1.5px] font-bold text-[14px] cursor-pointer ${
-                      isSelected
-                        ? "border-[#3F362E] bg-[#3F362E] text-white"
-                        : "border-[#ECE0D0] bg-[#FFFDF9] text-[#6E6359]"
-                    }`}
-                  >
-                    {target.label}
-                  </button>
-                );
-              }
-
+            {kidTargets.map((target) => {
+              const isSelected = isTargetSelected(target);
               return (
                 <button
                   key={target.id}
-                  onClick={() => setSelectedTarget(target)}
+                  onClick={() => toggleTarget(target)}
                   className={`flex items-center gap-2 px-2.5 py-1.5 rounded-full border-[1.5px] font-bold text-[14px] cursor-pointer ${
                     isSelected
                       ? "border-[#3F362E] bg-[#3F362E] text-white"
@@ -137,6 +164,17 @@ export default function NewPostModal({
                 </button>
               );
             })}
+            <button
+              key="all"
+              onClick={() => toggleTarget(allTarget)}
+              className={`px-4 py-1.5 rounded-full border-[1.5px] font-bold text-[14px] cursor-pointer ${
+                isTargetSelected(allTarget)
+                  ? "border-[#3F362E] bg-[#3F362E] text-white"
+                  : "border-[#ECE0D0] bg-[#FFFDF9] text-[#6E6359]"
+              }`}
+            >
+              {allTarget.label}
+            </button>
           </div>
 
           <div className="text-[12px] font-extrabold tracking-[0.7px] text-[#94887B] mb-2.5">
