@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { kids } from "@/app/_data/kids";
+import { kids, type Kid } from "@/app/_data/kids";
+import { addKidToMock } from "@/app/_data/kids";
 import MobileNav from "@/components/shared/MobileNav";
 import Sidebar from "@/components/shared/Sidebar";
 import KidCard from "@/components/kids/KidCard";
-import Link from "next/link";
+import AddKidModal from "@/components/kids/AddKidModal";
 import { PlusIcon, SearchIcon } from "@/components/shared/icons";
 
 function normalize(str: string) {
@@ -14,6 +15,13 @@ function normalize(str: string) {
 
 export default function KidsPage() {
   const [search, setSearch] = useState("");
+  const [showAddKid, setShowAddKid] = useState(false);
+  const [, setRefresh] = useState(0);
+
+  function handleAdd(kid: Kid) {
+    addKidToMock(kid);
+    setRefresh((prev) => prev + 1);
+  }
 
   const filtered = kids.filter((k) =>
     normalize(k.fullName).includes(normalize(search))
@@ -34,13 +42,13 @@ export default function KidsPage() {
                 Niños
               </h1>
             </div>
-            <Link
-              href="/agregar-nino"
-              className="flex items-center gap-2 p-[11px_18px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[14.5px] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)]"
+            <button
+              onClick={() => setShowAddKid(true)}
+              className="flex items-center gap-2 p-[11px_18px] rounded-[14px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] text-white font-extrabold text-[14.5px] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.7)] border-none cursor-pointer"
             >
               <PlusIcon className="w-[17px] h-[17px]" />
               Agregar niño
-            </Link>
+            </button>
           </div>
 
           <div className="flex items-center gap-[11px] bg-surface border border-[#ECE0D0] rounded-[14px] p-3 mb-[22px]">
@@ -70,6 +78,12 @@ export default function KidsPage() {
           </div>
         </div>
       </main>
+
+      <AddKidModal
+        open={showAddKid}
+        onClose={() => setShowAddKid(false)}
+        onAdd={handleAdd}
+      />
     </div>
   );
 }
