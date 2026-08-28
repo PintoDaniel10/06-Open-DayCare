@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { getKidById, PARENT_STATUS_BADGE, PARENT_STATUS_LABEL } from "@/app/_data/kids";
+import { getKidById } from "@/app/_data/kids";
 import MobileNav from "@/components/shared/MobileNav";
 import Sidebar from "@/components/shared/Sidebar";
-import { ChevronLeftIcon, AlertTriangleIcon, EditIcon, PlusIcon, SunLogo } from "@/components/shared/icons";
+import { ChevronLeftIcon, AlertTriangleIcon, EditIcon, SunLogo } from "@/components/shared/icons";
+import ParentsSection from "@/components/kids/ParentsSection";
 
 interface KidProfileProps {
   params: Promise<{ id: string }>;
@@ -151,66 +152,7 @@ export default async function KidProfile({ params }: KidProfileProps) {
               </Link>
 
               {/* Padres vinculados */}
-              <div className="bg-surface border border-[#ECE0D0] rounded-[16px] p-[16px_18px]">
-                <div className="text-[12.5px] font-extrabold tracking-[0.8px] text-[#8A7C6D] mb-[14px]">
-                  PADRES VINCULADOS
-                </div>
-                <div className="flex flex-col gap-[14px]">
-                  {kid.linkedParents.map((parent, i) => (
-                    <div key={i} className="flex items-center gap-[12px]">
-                      <div
-                        style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: "50%",
-                          background: parent.avatarBg,
-                          color: "#fff",
-                          fontFamily: "var(--font-fredoka)",
-                          fontWeight: 600,
-                          fontSize: 16,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flex: "none",
-                        }}
-                      >
-                        {parent.initial}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-extrabold text-[14.5px] text-foreground">
-                          {parent.name}
-                        </div>
-                        <div className="text-[12.5px] text-[#A89A8B]">
-                          {parent.role} ·{" "}
-                          {parent.status === "active" ? "activa" : "invitación enviada"}
-                        </div>
-                      </div>
-                      <span
-                        style={{
-                          fontSize: 10.5,
-                          fontWeight: 800,
-                          padding: "4px 9px",
-                          borderRadius: 999,
-                          background: PARENT_STATUS_BADGE[parent.status].bg,
-                          color: PARENT_STATUS_BADGE[parent.status].color,
-                        }}
-                      >
-                        {PARENT_STATUS_LABEL[parent.status]}
-                      </span>
-                    </div>
-                  ))}
-                  <Link href={`/kids/${kid.id}/vincular-padre`} className="flex items-center gap-[12px] pt-2">
-                    <span
-                      className="w-[40px] h-[40px] rounded-[50%] border border-dashed border-[#D8CBBA] flex items-center justify-center text-[#B0A290]"
-                    >
-                      <PlusIcon className="w-[18px] h-[18px]" />
-                    </span>
-                    <span className="font-extrabold text-[14.5px] text-[#C5503A]">
-                      Vincular otro padre
-                    </span>
-                  </Link>
-                </div>
-              </div>
+              <ParentsSection kid={kid} />
             </div>
           </div>
         </div>
