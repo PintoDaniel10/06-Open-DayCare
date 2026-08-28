@@ -106,6 +106,7 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
 
     onAdd(newKid);
     resetForm();
+    onClose();
   }
 
   if (!open) return null;

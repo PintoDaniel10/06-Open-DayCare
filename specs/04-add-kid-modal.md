@@ -1,6 +1,6 @@
 # SPEC 04 — Modal para agregar niño (calco de agregar-nino.dc.html como dialog)
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depende de:** SPEC 02 (kids-list-and-profile) — reutiliza data model de `kids.ts`, Sidebar, icons y tokens CSS
 > **Fecha:** 2026-07-06
 > **Objetivo:** Implementar un modal dialog overlay para agregar un niño nuevo desde la página `/kids`, replicando el diseño de `agregar-nino.dc.html` con validación de campos obligatorios y máscara de fecha.
@@ -95,24 +95,24 @@ Helpers nuevos en `app/_data/kids.ts`:
 
 ## Acceptance criteria
 
-- [ ] El botón "Agregar niño" en `/kids` abre un modal overlay (no navega a otra ruta).
-- [ ] El modal muestra un backdrop oscuro semitransparente detrás del formulario.
-- [ ] Click en el backdrop cierra el modal.
-- [ ] Presionar `Esc` cierra el modal.
-- [ ] El header del modal muestra `Cancelar` (gris), `Agregar niño` (Fredoka, centro), `Guardar` (accent, derecha).
-- [ ] Click en `Cancelar` cierra el modal.
-- [ ] El formulario tiene los 5 campos: nombre completo, fecha de nacimiento, sala, alergias, notas médicas.
-- [ ] El input de fecha aplica máscara automática `dd/mm/aaaa` mientras se escribe (solo dígitos, `/` insertados automáticamente).
-- [ ] El campo sala es un `<select>` con al menos 3 opciones: "Soles", "Estrellas", "Arcoíris".
-- [ ] Al intentar guardar con nombre vacío, se muestra un mensaje de error debajo del campo.
-- [ ] Al intentar guardar con fecha incompleta (menos de 10 caracteres), se muestra un mensaje de error debajo del campo.
-- [ ] Al intentar guardar sin sala seleccionada, se muestra un mensaje de error debajo del campo.
-- [ ] Al guardar con todos los campos obligatorios completos, el modal se cierra y el nuevo niño aparece en la lista de `/kids`.
-- [ ] El niño agregado tiene avatar con inicial, edad calculada, sala correcta y badge de alergia si aplica.
-- [ ] Los campos alergias y notas médicas son opcionales (no bloquean el guardado).
-- [ ] `npm run lint` pasa sin errores.
-- [ ] `npx tsc --noEmit` pasa sin errores.
-- [ ] No hay errores en la consola del navegador al abrir y cerrar el modal.
+- [x] El botón "Agregar niño" en `/kids` abre un modal overlay (no navega a otra ruta).
+- [x] El modal muestra un backdrop oscuro semitransparente detrás del formulario.
+- [x] Click en el backdrop cierra el modal.
+- [x] Presionar `Esc` cierra el modal.
+- [x] El header del modal muestra `Cancelar` (gris), `Agregar niño` (Fredoka, centro), `Guardar` (accent, derecha).
+- [x] Click en `Cancelar` cierra el modal.
+- [x] El formulario tiene los 5 campos: nombre completo, fecha de nacimiento, sala, alergias, notas médicas.
+- [x] El input de fecha aplica máscara automática `dd/mm/aaaa` mientras se escribe (solo dígitos, `/` insertados automáticamente).
+- [x] El campo sala es un `<select>` con al menos 3 opciones: "Soles", "Estrellas", "Arcoíris".
+- [x] Al intentar guardar con nombre vacío, se muestra un mensaje de error debajo del campo.
+- [x] Al intentar guardar con fecha incompleta (menos de 10 caracteres), se muestra un mensaje de error debajo del campo.
+- [x] Al intentar guardar sin sala seleccionada, se muestra un mensaje de error debajo del campo.
+- [x] Al guardar con todos los campos obligatorios completos, el modal se cierra y el nuevo niño aparece en la lista de `/kids`.
+- [x] El niño agregado tiene avatar con inicial, edad calculada, sala correcta y badge de alergia si aplica.
+- [x] Los campos alergias y notas médicas son opcionales (no bloquean el guardado).
+- [x] `npm run lint` pasa sin errores.
+- [x] `npx tsc --noEmit` pasa sin errores.
+- [x] No hay errores en la consola del navegador al abrir y cerrar el modal.
 
 ## Decisions
 
