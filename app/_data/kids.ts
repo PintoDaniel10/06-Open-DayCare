@@ -374,3 +374,8 @@ export function parseAllergyText(text: string): AllergyType[] {
 export function addKidToMock(kid: Kid): void {
   kids.push(kid);
 }
+
+export function isValidEmail(email: string): boolean {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
