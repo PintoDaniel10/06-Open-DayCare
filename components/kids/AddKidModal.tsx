@@ -89,10 +89,6 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
     setBirthDate(formatted);
   }
 
-  function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) onClose();
-  }
-
   function resetForm() {
     setFullName("");
     setBirthDate("");
@@ -147,14 +143,8 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
-      onClick={handleBackdropClick}
-    >
-      <div
-        className="w-full max-w-[520px] bg-[#FBF4EC] border border-[#ECE0D0] rounded-[24px] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)] overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6">
+      <div className="w-full max-w-[520px] bg-[#FBF4EC] border border-[#ECE0D0] rounded-[24px] shadow-[0_20px_50px_-24px_rgba(63,54,46,0.35)] overflow-hidden">
         <div className="flex items-center justify-between px-[26px] py-[20px] border-b border-[#ECE0D0]">
           <button
             onClick={handleClose}
