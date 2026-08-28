@@ -60,28 +60,16 @@ export default function NewPostModal({
     setSelectedTargets((prev) => {
       if (target.type === "all") {
         const isAllSelected = prev.some((t) => t.type === "all");
-        if (isAllSelected) {
-          return prev.filter((t) => t.type !== "all");
-        }
-        return [...kidTargets, allTarget];
+        return isAllSelected ? [] : [...kidTargets, allTarget];
       }
-
       const exists = prev.some((t) => t.type === "kid" && t.id === target.id);
+      const withoutAll = prev.filter((t) => t.type !== "all");
       if (exists) {
-        const remaining = prev.filter(
-          (t) => t.type === "kid" && t.id !== target.id
+        return withoutAll.filter(
+          (t) => t.type !== "kid" || t.id !== target.id
         );
-        return remaining.filter((t) => t.type !== "all");
       }
-
-      const newSelected = [...prev, target];
-      const allKidsSelected = kidTargets.every((k) =>
-        newSelected.some((s) => s.type === "kid" && s.id === k.id)
-      );
-      if (allKidsSelected) {
-        return [...newSelected, allTarget];
-      }
-      return newSelected;
+      return [...withoutAll, target];
     });
   }
 
@@ -96,10 +84,7 @@ export default function NewPostModal({
 
   const isTargetSelected = (target: NewPostTarget) => {
     if (target.type === "all") {
-      const allKidsSelected = kidTargets.every((k) =>
-        selectedTargets.some((t) => t.type === "kid" && t.id === k.id)
-      );
-      return allKidsSelected;
+      return selectedTargets.some((t) => t.type === "all");
     }
     return selectedTargets.some(
       (t) => t.type === "kid" && t.id === (target as Extract<NewPostTarget, { type: "kid" }>).id
