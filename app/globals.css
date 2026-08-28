@@ -34,6 +34,9 @@
   /* Fondo del form */
   --color-canvas-warm: #FBF4EC;
 
+  /* Validación */
+  --color-error: #E53E3E;
+
   /* Tipografía */
   --font-sans: var(--font-nunito);
   --font-headings: var(--font-fredoka);
