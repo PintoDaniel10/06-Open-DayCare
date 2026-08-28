@@ -44,6 +44,41 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
 
+  function isValidDate(dateStr: string): boolean {
+    const parts = dateStr.split("/");
+    if (parts.length !== 3) return false;
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+    if (day < 1 || day > 31) return false;
+    if (month < 1 || month > 12) return false;
+    if (year < 1900 || year > 2100) return false;
+    const date = new Date(year, month - 1, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date > today) return false;
+    return true;
+  }
+
+  function validateDate(value: string): string {
+    if (value.length < 10) return "La fecha es obligatoria (dd/mm/aaaa)";
+    if (!isValidDate(value)) {
+      const parts = value.split("/");
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10);
+      const year = parseInt(parts[2], 10);
+      const date = new Date(year, month - 1, day);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (date > today) return "La fecha no puede ser futura";
+      return "La fecha ingresada no es válida";
+    }
+    return "";
+  }
   function handleBirthDateChange(value: string) {
     const digits = value.replace(/\D/g, "").slice(0, 8);
     let formatted = "";
@@ -74,7 +109,7 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
 
   function handleSave() {
     const nameErr = !fullName.trim() ? "El nombre es obligatorio" : "";
-    const dateErr = birthDate.length < 10 ? "La fecha es obligatoria (dd/mm/aaaa)" : "";
+    const dateErr = validateDate(birthDate);
     const roomErr = !room ? "La sala es obligatoria" : "";
 
     setErrors({ fullName: nameErr, birthDate: dateErr, room: roomErr });
