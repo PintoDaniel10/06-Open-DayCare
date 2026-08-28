@@ -30,9 +30,10 @@ const NAV_HREF: Record<NavIcon, string> = {
 
 interface SidebarContentProps {
   activeNav?: NavIcon | null;
+  onOpenNewPost?: () => void;
 }
 
-export function SidebarContent({ activeNav }: SidebarContentProps) {
+export function SidebarContent({ activeNav, onOpenNewPost }: SidebarContentProps) {
   return (
     <div className="flex flex-col h-full py-6 px-4">
       <Link
@@ -52,13 +53,13 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
         </span>
       </Link>
 
-      <Link
-        href="/crear-publicacion"
-        className="flex items-center justify-center gap-2 w-full p-3 rounded-[14px] mb-[18px] text-white font-extrabold text-[14.5px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)]"
+      <button
+        onClick={onOpenNewPost}
+        className="flex items-center justify-center gap-2 w-full p-3 rounded-[14px] mb-[18px] text-white font-extrabold text-[14.5px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)] border-none cursor-pointer"
       >
         <PlusIcon className="w-[17px] h-[17px]" />
         Nueva publicación
-      </Link>
+      </button>
 
       <nav className="flex flex-col gap-1 flex-1">
         {navItems.map((item) => {
@@ -114,12 +115,13 @@ export function SidebarContent({ activeNav }: SidebarContentProps) {
 
 interface SidebarProps {
   activeNav?: NavIcon | null;
+  onOpenNewPost?: () => void;
 }
 
-export default function Sidebar({ activeNav }: SidebarProps) {
+export default function Sidebar({ activeNav, onOpenNewPost }: SidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-[248px] flex-none bg-surface border-r border-[#ECE0D0] sticky top-0 h-screen">
-      <SidebarContent activeNav={activeNav} />
+      <SidebarContent activeNav={activeNav} onOpenNewPost={onOpenNewPost} />
     </aside>
   );
 }
