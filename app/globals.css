@@ -37,6 +37,16 @@
   /* Validación */
   --color-error: #E53E3E;
 
+  /* New post type colors */
+  --color-new-post-meal: #9A7B1E;
+  --color-new-post-nap-bg: #E7DCF6;
+  --color-new-post-nap-text: #7B5FC0;
+  --color-new-post-mood-bg: #F9D2DE;
+  --color-new-post-mood-text: #C56486;
+  --color-new-post-photo-bg: #FBD8CC;
+  --color-new-post-photo-text: #D9684A;
+  --color-new-post-announcement-bg: #CCD8F4;
+
   /* Tipografía */
   --font-sans: var(--font-nunito);
   --font-headings: var(--font-fredoka);
