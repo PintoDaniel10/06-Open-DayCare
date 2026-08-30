@@ -34,11 +34,23 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Playwright: screenshots y cualquier salida relacionada deben ir en `.playwright-mcp/` (gitignored). El navegador configurado es `msedge` (ver `opencode.json`).
 - context7: usar para traer documentación actualizada de Next.js / Tailwind antes de escribir código.
+- supabase: base de datos Postgres, autenticación, edge functions, realtime, storage y más. Usar para queries SQL, migraciones, advisors, logs y gestión del proyecto.
 
-## Spec Driven Development - Skills
+## Supabase
+
+- Project URL: usar `supabase_get_project_url` para obtenerla
+- API Keys: usar `supabase_get_publishable_keys` para obtener las keys (nunca exponer `service_role` en el cliente)
+- Migraciones: usar `supabase_apply_migration` para DDL, `supabase_execute_sql` para queries de solo lectura
+- Advisors: correr `supabase_get_advisors` (tipo `security` y `performance`) después de cambios de schema
+- Logs: usar `supabase_query_logs` para debugging, filtrando por `source` como `edge_logs`, `postgres_logs`, `function_edge_logs`
+
+## Skills
+
 - `/spec` — Usaremos esta habilidad para crear las especificaciones
 - `/spec-impl` — Usaremos este skill para hacer las implementaciones
 - `/spec-verifier` — Agente para verificar criterios de aceptación de un spec. Revisa el código, compara screenshots con Playwright + vision, valida buenas prácticas con Context7, y marca los checkboxes del spec.
+- `/supabase` — Usar en CUALQUIER tarea que involucre Supabase: base de datos, auth, edge functions, realtime, storage, RLS, migraciones, schemas, debugging, logs. Cargar antes de escribir o cambiar cualquier cosa relacionada con Supabase.
+- `/supabase-postgres-best-practices` — Cargar ANTES de escribir o modificar cualquier cosa que viva en la base de datos Postgres: tablas, columnas, tipos de datos, indexes, triggers, funciones, RLS, migraciones, queries. Incluye optimización de queries, gestión de conexiones, seguridad y patrones de acceso a datos.
 
 ## Commands
 
