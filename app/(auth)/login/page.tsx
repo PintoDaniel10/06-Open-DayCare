@@ -1,6 +1,36 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/utils/supabase/client';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const supabase = createClient();
+
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError) {
+      setError('Credenciales incorrectas. Intentalo nuevamente.');
+      setLoading(false);
+      return;
+    }
+
+    window.location.href = '/';
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-[1.05fr_1fr]" style={{ background: '#FBF4EC' }}>
       {/* Left panel */}
@@ -100,54 +130,68 @@ export default function LoginPage() {
             Ingresá para ver el día de hoy.
           </p>
 
-          {/* Email */}
-          <div className="text-[12px] font-bold tracking-[.7px] text-[#94887B] mb-[8px]">
-            EMAIL
-          </div>
-          <input
-            type="email"
-            defaultValue="caro@opendaycare.com"
-            className="w-full px-[16px] py-[14px] rounded-[14px] text-[15px] text-[#3F362E]"
-            style={{
-              border: '1.5px solid #EADFD0',
-              background: '#fff',
-              marginBottom: '18px',
-            }}
-          />
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div className="text-[12px] font-bold tracking-[.7px] text-[#94887B] mb-[8px]">
+              EMAIL
+            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-[16px] py-[14px] rounded-[14px] text-[15px] text-[#3F362E]"
+              style={{
+                border: '1.5px solid #EADFD0',
+                background: '#fff',
+                marginBottom: '18px',
+              }}
+              required
+            />
 
-          {/* Password */}
-          <div className="text-[12px] font-bold tracking-[.7px] text-[#94887B] mb-[8px]">
-            CONTRASEÑA
-          </div>
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="w-full px-[16px] py-[14px] rounded-[14px] text-[15px] text-[#3F362E]"
-            style={{
-              border: '1.5px solid #EADFD0',
-              background: '#fff',
-              marginBottom: '10px',
-            }}
-          />
+            {/* Password */}
+            <div className="text-[12px] font-bold tracking-[.7px] text-[#94887B] mb-[8px]">
+              CONTRASEÑA
+            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-[16px] py-[14px] rounded-[14px] text-[15px] text-[#3F362E]"
+              style={{
+                border: '1.5px solid #EADFD0',
+                background: '#fff',
+                marginBottom: '10px',
+              }}
+              required
+            />
 
-          {/* Forgot password */}
-          <div className="text-right mb-[20px]">
-            <span className="text-[#C5503A] text-[13.5px] font-bold cursor-pointer">
-              ¿Olvidaste tu contraseña?
-            </span>
-          </div>
+            {/* Forgot password */}
+            <div className="text-right mb-[20px]">
+              <span className="text-[#C5503A] text-[13.5px] font-bold cursor-pointer">
+                ¿Olvidaste tu contraseña?
+              </span>
+            </div>
 
-          {/* Login button */}
-          <a
-            href="#"
-            className="block text-center w-full py-[15px] rounded-[15px] font-extrabold text-[16px] text-white cursor-pointer"
-            style={{
-              background: 'linear-gradient(180deg, #F4977E, #EE8164)',
-              boxShadow: '0 10px 22px -8px rgba(238,129,100,.7)',
-            }}
-          >
-            Iniciar sesión
-          </a>
+            {/* Login button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="block text-center w-full py-[15px] rounded-[15px] font-extrabold text-[16px] text-white cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{
+                background: 'linear-gradient(180deg, #F4977E, #EE8164)',
+                boxShadow: '0 10px 22px -8px rgba(238,129,100,.7)',
+              }}
+            >
+              {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+            </button>
+
+            {/* Error message */}
+            {error && (
+              <p className="mt-[14px] text-center text-[14px] text-red-600 font-semibold">
+                {error}
+              </p>
+            )}
+          </form>
 
           {/* Footer link */}
           <p className="text-center mt-[24px] text-[#94887B] text-[14.5px]" style={{ margin: '24px 0 0' }}>
