@@ -28,6 +28,7 @@ export default function LoginPage() {
       return;
     }
 
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = '/';
   };
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { navItems, sidebarUser } from "@/app/_data/mock";
 import type { NavIcon } from "@/app/_data/mock";
+import { createClient } from "@/utils/supabase/client";
 import {
   BellIcon,
   HomeIcon,
@@ -100,13 +101,18 @@ export function SidebarContent({ activeNav, onOpenNewPost }: SidebarContentProps
               {sidebarUser.role}
             </span>
           </span>
-          <Link
-            href="/login"
+          <button
             title="Cerrar sesión"
-            className="flex-none w-8 h-8 rounded-[10px] flex items-center justify-center bg-background text-[#94887B]"
+            onClick={async () => {
+              const supabase = createClient();
+              await supabase.auth.signOut();
+              // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+              window.location.href = "/login";
+            }}
+            className="flex-none w-8 h-8 rounded-[10px] flex items-center justify-center bg-background text-[#94887B] hover:text-[#C5503A] cursor-pointer border-none bg-transparent"
           >
             <LogoutIcon className="w-4 h-4" />
-          </Link>
+          </button>
         </div>
       </div>
     </div>
