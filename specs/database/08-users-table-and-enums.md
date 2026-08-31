@@ -1,6 +1,6 @@
 # SPEC 08 — Users table with enums, RLS, and seed staff user
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** Spec 07 (daycares table)
 > **Date:** 2026-07-08
 > **Objective:** Crear los enums `user_role` y `user_status`, la tabla `users` con RLS, trigger de `auth.users`, y un usuario staff de prueba.
@@ -14,7 +14,7 @@
 - Habilitar Row Level Security (RLS) en la tabla `users`.
 - Crear políticas RLS básicas: lectura para usuarios autenticados de la misma guardería, escritura para staff/admin.
 - Crear trigger `AFTER INSERT ON auth.users` que inserte automáticamente una fila en `users` pasando `daycare_id`, `role` y `full_name` desde `raw_user_meta_data`.
-- Insertar un usuario staff de prueba: `fernando@google.com` con password `Abc123456@`, vinculado a "Guardería Sala Soles".
+- Insertar un usuario staff de prueba: `daniel@google.com` con password `Abc123456@`, vinculado a "Guardería Sala Soles".
 - Aplicar como migración Supabase usando `apply_migration`.
 
 **Out of scope (for future specs):**
@@ -143,25 +143,25 @@ CREATE TRIGGER on_auth_user_created
    - Políticas RLS de lectura/escritura.
    - Trigger `handle_new_user` para `auth.users`.
 2. Aplicar la migración con `apply_migration`.
-3. Crear usuario staff `fernando@google.com` con password `Abc123456@` vía Supabase Auth API (o `supabase auth signup`), pasando `raw_user_meta_data` con `daycare_id` (el de "Guardería Sala Soles"), `role: 'staff'`, `full_name: 'Fernando'`.
+3. Crear usuario staff `daniel@google.com` con password `Abc123456@` vía Supabase Auth API (o `supabase auth signup`), pasando `raw_user_meta_data` con `daycare_id` (el de "Guardería Sala Soles"), `role: 'staff'`, `full_name: 'Daniel'`.
 4. Verificar con `list_tables` que la tabla existe y `execute_sql` para confirmar el usuario staff creado.
 
 ## Acceptance criteria
 
-- [ ] Los enums `user_role` y `user_status` existen en la base de datos con los valores correctos.
-- [ ] La tabla `users` existe con todas las columnas especificadas.
-- [ ] RLS está habilitado en la tabla `users`.
-- [ ] Las políticas RLS permiten SELECT para usuarios de la misma guardería.
-- [ ] Las políticas RLS permiten INSERT/UPDATE para staff y admin.
-- [ ] El trigger `handle_new_user` funciona: al crear un usuario en `auth.users`, se crea automáticamente la fila en `users`.
-- [ ] Existe un usuario staff `fernando@google.com` vinculado a "Guardería Sala Soles".
-- [ ] La migración se aplicó sin errores vía `apply_migration`.
+- [x] Los enums `user_role` y `user_status` existen en la base de datos con los valores correctos.
+- [x] La tabla `users` existe con todas las columnas especificadas.
+- [x] RLS está habilitado en la tabla `users`.
+- [x] Las políticas RLS permiten SELECT para usuarios de la misma guardería.
+- [x] Las políticas RLS permiten INSERT/UPDATE para staff y admin.
+- [x] El trigger `handle_new_user` funciona: al crear un usuario en `auth.users`, se crea automáticamente la fila en `users`.
+- [x] Existe un usuario staff `daniel@google.com` vinculado a "Guardería Sala Soles".
+- [x] La migración se aplicó sin errores vía `apply_migration`.
 
 ## Decisions
 
 - **Yes:** Crear solo los enums `user_role` y `user_status` en esta migración. Los demás enums se crearán cuando se necesiten para sus tablas.
 - **Yes:** Trigger `AFTER INSERT ON auth.users` para crear automáticamente la fila en `users`. Sigue la convención del schema.
-- **Yes:** Usuario staff seed con credenciales `fernando@google.com` / `Abc123456@`. Para pruebas de desarrollo.
+- **Yes:** Usuario staff seed con credenciales `daniel@google.com` / `Abc123456@`. Para pruebas de desarrollo.
 - **No:** Incluir flujo de invitaciones para padres. Se hará en spec separada.
 - **No:** Crear usuario parent de prueba. Solo staff por ahora.
 

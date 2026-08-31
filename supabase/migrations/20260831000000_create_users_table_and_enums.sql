@@ -80,13 +80,10 @@ BEGIN
   INSERT INTO public.users (id, daycare_id, role, full_name, status)
   VALUES (
     NEW.id,
-    NULLIF(NEW.raw_user_meta_data->>'daycare_id', '')::uuid,
+    (NEW.raw_user_meta_data->>'daycare_id')::uuid,
     (NEW.raw_user_meta_data->>'role')::user_role,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', 'Unknown'),
-    CASE
-      WHEN NEW.raw_user_meta_data->>'status' = 'pending' THEN 'pending'
-      ELSE 'active'
-    END
+    NEW.raw_user_meta_data->>'full_name',
+    COALESCE((NEW.raw_user_meta_data->>'status')::user_status, 'active')
   );
   RETURN NEW;
 END;
