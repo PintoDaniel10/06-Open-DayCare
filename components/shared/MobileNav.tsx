@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { SidebarContent } from "./Sidebar";
+import { SidebarContent, type SidebarUserData } from "./Sidebar";
 import type { NavIcon } from "@/app/_data/mock";
 import { CloseIcon, MenuIcon } from "./icons";
 
 interface MobileNavProps {
   activeNav?: NavIcon | null;
+  user?: SidebarUserData | null;
 }
 
-export default function MobileNav({ activeNav }: MobileNavProps) {
+export default function MobileNav({ activeNav, user }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -52,7 +53,7 @@ export default function MobileNav({ activeNav }: MobileNavProps) {
         >
           <CloseIcon className="w-5 h-5" />
         </button>
-        <SidebarContent activeNav={activeNav} />
+        <SidebarContent activeNav={activeNav} user={user} />
       </aside>
     </>
   );

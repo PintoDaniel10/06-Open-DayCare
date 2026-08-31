@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
-import { navItems, sidebarUser } from "@/app/_data/mock";
+import { useEffect, useState } from "react";
+import { navItems } from "@/app/_data/mock";
 import type { NavIcon } from "@/app/_data/mock";
+import { createClient } from "@/utils/supabase/client";
 import {
   BellIcon,
   HomeIcon,
@@ -13,6 +15,44 @@ import {
   SunLogo,
   UserIcon,
 } from "./icons";
+
+export interface SidebarUserData {
+  name: string;
+  role: string;
+  initial: string;
+}
+
+async function fetchSidebarUser(): Promise<SidebarUserData | null> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("full_name, role")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || !profile.full_name) return null;
+
+  const parts = profile.full_name.trim().split(/\s+/);
+  const initial = parts[0]?.[0]?.toUpperCase() ?? "";
+
+  const roleLabels: Record<string, string> = {
+    staff: "Maestra",
+    parent: "Padre",
+    admin: "Admin",
+  };
+  const roleLabel = roleLabels[profile.role] ?? profile.role;
+
+  return {
+    name: profile.full_name,
+    role: roleLabel,
+    initial,
+  };
+}
 
 const NAV_ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   home: HomeIcon,
@@ -31,9 +71,19 @@ const NAV_HREF: Record<NavIcon, string> = {
 interface SidebarContentProps {
   activeNav?: NavIcon | null;
   onOpenNewPost?: () => void;
+  user?: SidebarUserData | null;
 }
 
-export function SidebarContent({ activeNav, onOpenNewPost }: SidebarContentProps) {
+export function SidebarContent({ activeNav, onOpenNewPost, user }: SidebarContentProps) {
+  const [fetchedUser, setFetchedUser] = useState<SidebarUserData | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      fetchSidebarUser().then(setFetchedUser);
+    }
+  }, [user]);
+
+  const sidebarUser = user ?? fetchedUser;
   return (
     <div className="flex flex-col h-full py-6 px-4">
       <Link
@@ -87,28 +137,35 @@ export function SidebarContent({ activeNav, onOpenNewPost }: SidebarContentProps
         })}
       </nav>
 
-      <div className="border-t border-[#ECE0D0] pt-[14px] mt-[10px]">
-        <div className="flex items-center gap-[11px] py-[6px] px-2">
-          <span className="flex-none w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-headings font-semibold text-[16px] bg-accent-warm">
-            {sidebarUser.initial}
-          </span>
-          <span className="flex-1 min-w-0">
-            <span className="block font-extrabold text-[14px] text-foreground">
-              {sidebarUser.name}
+      {sidebarUser && (
+        <div className="border-t border-[#ECE0D0] pt-[14px] mt-[10px]">
+          <div className="flex items-center gap-[11px] py-[6px] px-2">
+            <span className="flex-none w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-headings font-semibold text-[16px] bg-accent-warm">
+              {sidebarUser.initial}
             </span>
-            <span className="block text-[12px] text-[#A89A8B]">
-              {sidebarUser.role}
+            <span className="flex-1 min-w-0">
+              <span className="block font-extrabold text-[14px] text-foreground">
+                {sidebarUser.name}
+              </span>
+              <span className="block text-[12px] text-[#A89A8B]">
+                {sidebarUser.role}
+              </span>
             </span>
-          </span>
-          <Link
-            href="/login"
-            title="Cerrar sesión"
-            className="flex-none w-8 h-8 rounded-[10px] flex items-center justify-center bg-background text-[#94887B]"
-          >
-            <LogoutIcon className="w-4 h-4" />
-          </Link>
+            <button
+              title="Cerrar sesión"
+              onClick={async () => {
+                const supabase = createClient();
+                await supabase.auth.signOut();
+                // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+                window.location.href = "/login";
+              }}
+              className="flex-none w-8 h-8 rounded-[10px] flex items-center justify-center bg-background text-[#94887B] hover:text-[#C5503A] cursor-pointer border-none bg-transparent"
+            >
+              <LogoutIcon className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -116,12 +173,13 @@ export function SidebarContent({ activeNav, onOpenNewPost }: SidebarContentProps
 interface SidebarProps {
   activeNav?: NavIcon | null;
   onOpenNewPost?: () => void;
+  user?: SidebarUserData | null;
 }
 
-export default function Sidebar({ activeNav, onOpenNewPost }: SidebarProps) {
+export default function Sidebar({ activeNav, onOpenNewPost, user }: SidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-[248px] flex-none bg-surface border-r border-[#ECE0D0] sticky top-0 h-screen">
-      <SidebarContent activeNav={activeNav} onOpenNewPost={onOpenNewPost} />
+      <SidebarContent activeNav={activeNav} onOpenNewPost={onOpenNewPost} user={user} />
     </aside>
   );
 }
