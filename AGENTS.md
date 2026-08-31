@@ -45,6 +45,31 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Advisors: correr `supabase_get_advisors` (tipo `security` y `performance`) después de cambios de schema
 - Logs: usar `supabase_query_logs` para debugging, filtrando por `source` como `edge_logs`, `postgres_logs`, `function_edge_logs`
 
+### Supabase Client (Next.js App Router)
+
+La aplicación usa `@supabase/ssr` y `@supabase/supabase-js` para interactuar con la base de datos desde los componentes de Next.js. Los helpers están en `utils/supabase/`:
+
+- **Server Components**: usar `createClient` desde `@/utils/supabase/server`. Recibe el `cookieStore` de `next/headers`.
+  ```ts
+  import { createClient } from "@/utils/supabase/server"
+  import { cookies } from "next/headers"
+
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+  const { data } = await supabase.from("table").select()
+  ```
+
+- **Client Components**: usar `createClient` desde `@/utils/supabase/client`. Se instancia sin argumentos.
+  ```ts
+  import { createClient } from "@/utils/supabase/client"
+
+  const supabase = createClient()
+  const { data } = await supabase.from("table").select()
+  ```
+
+- **Middleware**: el archivo `middleware.ts` en la raíz usa `@/utils/supabase/middleware` para refrescar sesiones. El matcher excluye assets estáticos.
+- **Variables de entorno**: `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` están en `.env`.
+
 ## Skills
 
 - `/spec` — Usaremos esta habilidad para crear las especificaciones
