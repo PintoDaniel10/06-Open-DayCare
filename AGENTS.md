@@ -41,6 +41,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Project URL: usar `supabase_get_project_url` para obtenerla
 - API Keys: usar `supabase_get_publishable_keys` para obtener las keys (nunca exponer `service_role` en el cliente)
 - Migraciones: usar `supabase_apply_migration` para DDL, `supabase_execute_sql` para queries de solo lectura
+- **CRUCIAL:** SIEMPRE crear el archivo `.sql` correspondiente en `supabase/migrations/` cada vez que se manipule la base de datos (DDL, DML, RLS, políticas, triggers, etc.). `supabase_apply_migration` aplica los cambios en la nube pero NO genera el archivo local. El archivo debe existir para mantener el historial de migraciones versionado en git.
 - Advisors: correr `supabase_get_advisors` (tipo `security` y `performance`) después de cambios de schema
 - Logs: usar `supabase_query_logs` para debugging, filtrando por `source` como `edge_logs`, `postgres_logs`, `function_edge_logs`
 
