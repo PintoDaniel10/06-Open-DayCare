@@ -77,6 +77,11 @@ El agente:
 6. Revisa errores de consola
 7. Marca `[x]`/`[ ]` en el spec y fija problemas de código
 
+## Specs
+
+- Los specs relacionados con la base de datos deben ir en `specs/database/`
+- Los demás specs van en `specs/`
+
 ## Reglas de codigo
 
 - Usar codigo limpio, nombres, funciones, variables, etc en ingles.
