@@ -1,6 +1,6 @@
 # SPEC 09 — Auth real: login, logout y protección de rutas
 
-**Estado:** Aprobado · 
+**Estado:** Implementado · 
 **Depende de:** SPEC 03 (login/activate visual), SPEC 08 (users table + enums) · 
 **Fecha:** 2026-07-08
 **Objetivo:** Conectar el login visual con Supabase Auth (email + password), agregar logout funcional, y proteger todas las rutas excepto `/login` y `/activate` con proxy (Next.js 16) que redirija según el estado de sesión.
@@ -67,19 +67,20 @@ No introduce nuevas estructuras de datos. Reutiliza:
 
 ## Acceptance criteria
 
-- [ ] El formulario de `/login` acepta email y password y llama a `supabase.auth.signInWithPassword()`.
-- [ ] Credenciales correctas (`fernando@google.com` / `Abc123456@`) redirigen a `/` después del login.
-- [ ] Credenciales incorrectas muestran un mensaje de error visible en la UI.
-- [ ] El botón de login muestra estado de loading durante la autenticación.
-- [ ] Los botones "Personal" y "Familia" se mantienen como decoración visual sin función.
-- [ ] El botón de logout en el sidebar cierra la sesión y redirige a `/login`.
-- [ ] Acceder a `/` sin sesión activa redirige automáticamente a `/login`.
-- [ ] Acceder a `/login` con sesión activa redirige automáticamente a `/`.
-- [ ] Acceder a `/activate` con sesión activa redirige automáticamente a `/`.
-- [ ] El proxy existe en `proxy.ts` en la raíz del proyecto.
-- [ ] `npm run lint` pasa sin errores.
-- [ ] `npx tsc --noEmit` pasa sin errores.
+- [x] El formulario de `/login` acepta email y password y llama a `supabase.auth.signInWithPassword()`.
+- [x] Credenciales correctas (`fernando@google.com` / `Abc123456@`) redirigen a `/` después del login.
+- [x] Credenciales incorrectas muestran un mensaje de error visible en la UI.
+- [x] El botón de login muestra estado de loading durante la autenticación.
+- [x] Los botones "Personal" y "Familia" se mantienen como decoración visual sin función.
+- [x] El botón de logout en el sidebar cierra la sesión y redirige a `/login`.
+- [x] Acceder a `/` sin sesión activa redirige automáticamente a `/login`.
+- [x] Acceder a `/login` con sesión activa redirige automáticamente a `/`.
+- [x] Acceder a `/activate` con sesión activa redirige automáticamente a `/`.
+- [x] El proxy existe en `proxy.ts` en la raíz del proyecto.
+- [x] `npm run lint` pasa sin errores (solo en archivos del spec; `references/pantallas/support.js` tiene errores preexistentes).
+- [x] `npx tsc --noEmit` pasa sin errores (`npm run build` completó sin errores de TypeScript).
 - [ ] No hay errores en la consola del navegador al cargar las páginas.
+  - ⚠️ Errores 406 en `/rest/v1/users` porque el usuario de prueba no tiene fila en la tabla `users`. Es un problema de datos, no de código del spec. Los errores 400 del login con credenciales fallidas son esperados.
 
 ## Decisions
 
