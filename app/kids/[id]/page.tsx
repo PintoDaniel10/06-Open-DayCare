@@ -40,7 +40,11 @@ function getAvatarColor(bg: string): string {
 }
 
 function calculateAge(birthDate: string): number {
-  const birth = new Date(birthDate);
+  const parts = birthDate.split("-");
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  const birth = new Date(year, month, day);
   const today = new Date();
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
@@ -51,15 +55,16 @@ function calculateAge(birthDate: string): number {
 }
 
 function formatBirthDateDisplay(isoDate: string): string {
-  const date = new Date(isoDate);
+  const parts = isoDate.split("-");
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  const date = new Date(year, month, day);
   const months = [
     "ene", "feb", "mar", "abr", "may", "jun",
     "jul", "ago", "sep", "oct", "nov", "dic",
   ];
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 }
 
 interface KidProfileProps {

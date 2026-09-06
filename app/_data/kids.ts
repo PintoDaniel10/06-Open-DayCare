@@ -42,3 +42,25 @@ export function randomAvatarColor(bg: string): string {
   };
   return colorMap[bg] ?? '#333333';
 }
+
+// Compatibilidad temporal: otros archivos aún importan `kids`.
+// Ya no se usa como fuente de datos real (ver Step 6 del spec 10).
+// Mantenemos el tipo para que no rompa imports.
+export interface Kid {
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  initial: string;
+  age: number;
+  room: string;
+  birthDate: string;
+  enrollmentDate: string;
+  allergies: string[];
+  medicalNotes: string;
+  linkedParents: LinkedParent[];
+  avatarBg: string;
+  avatarColor: string;
+}
+
+export const kids: Kid[] = [];

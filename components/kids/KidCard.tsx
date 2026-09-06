@@ -36,7 +36,11 @@ function getAvatarColor(bg: string): string {
 }
 
 function calculateAge(birthDate: string): number {
-  const birth = new Date(birthDate);
+  const parts = birthDate.split("-");
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  const birth = new Date(year, month, day);
   const today = new Date();
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
