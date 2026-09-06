@@ -1,3 +1,181 @@
+type DatabaseInternal = {
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
+  public: {
+    Tables: {
+      children: {
+        Row: {
+          allergy_tags: string[] | null
+          birth_date: string
+          created_at: string
+          enrolled_at: string
+          full_name: string
+          id: string
+          medical_notes: string | null
+          photo_consent: boolean
+          room_id: string
+          status: "active" | "archived"
+          updated_at: string
+        }
+        Insert: {
+          allergy_tags?: string[] | null
+          birth_date: string
+          created_at?: string
+          enrolled_at: string
+          full_name: string
+          id?: string
+          medical_notes?: string | null
+          photo_consent?: boolean
+          room_id: string
+          status?: "active" | "archived"
+          updated_at?: string
+        }
+        Update: {
+          allergy_tags?: string[] | null
+          birth_date?: string
+          created_at?: string
+          enrolled_at?: string
+          full_name?: string
+          id?: string
+          medical_notes?: string | null
+          photo_consent?: boolean
+          room_id?: string
+          status?: "active" | "archived"
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "children_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      daycares: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rooms: {
+        Row: {
+          created_at: string
+          daycare_id: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          daycare_id: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          daycare_id?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rooms_daycare_id_fkey"
+            columns: ["daycare_id"]
+            isOneToOne: false
+            referencedRelation: "daycares"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          daily_summary_enabled: boolean
+          daycare_id: string | null
+          full_name: string
+          id: string
+          notify_on_post: boolean
+          role: "staff" | "parent" | "admin"
+          status: "pending" | "active"
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_summary_enabled?: boolean
+          daycare_id?: string | null
+          full_name: string
+          id: string
+          notify_on_post?: boolean
+          role: "staff" | "parent" | "admin"
+          status?: "pending" | "active"
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_summary_enabled?: boolean
+          daycare_id?: string | null
+          full_name?: string
+          id?: string
+          notify_on_post?: boolean
+          role?: "staff" | "parent" | "admin"
+          status?: "pending" | "active"
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_daycare_id_fkey"
+            columns: ["daycare_id"]
+            isOneToOne: false
+            referencedRelation: "daycares"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      child_status: "active" | "archived"
+      relationship_type: "father" | "mother" | "guardian"
+      user_role: "staff" | "parent" | "admin"
+      user_status: "pending" | "active"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+export type Room = DatabaseInternal["public"]["Tables"]["rooms"]["Row"]
+export type Child = DatabaseInternal["public"]["Tables"]["children"]["Row"]
+
 export type Json =
   | string
   | number

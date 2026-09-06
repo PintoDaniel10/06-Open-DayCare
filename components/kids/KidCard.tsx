@@ -1,19 +1,73 @@
 import Link from "next/link";
-import { type Kid, ALLERGY_BADGE, parentCountLabel } from "@/app/_data/kids";
 import { ChevronRightIcon } from "@/components/shared/icons";
 
-interface KidCardProps {
-  kid: Kid;
+const AVATAR_COLORS = [
+  "#A9D9E8",
+  "#F4B8CC",
+  "#B9DEC4",
+  "#F4DC8E",
+  "#C9B6E8",
+];
+
+const AVATAR_COLOR_MAP: Record<string, string> = {
+  "#A9D9E8": "#1F7A93",
+  "#F4B8CC": "#C44A7A",
+  "#B9DEC4": "#3E8B62",
+  "#F4DC8E": "#9A7B1E",
+  "#C9B6E8": "#7B5FC0",
+};
+
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    hash = hash & hash;
+  }
+  return Math.abs(hash);
 }
 
-export default function KidCard({ kid }: KidCardProps) {
-  const hasAllergy = kid.allergies.length > 0;
-  const firstAllergy = hasAllergy ? kid.allergies[0] : null;
-  const noParents = kid.linkedParents.length === 0;
+function getAvatarBg(name: string): string {
+  const hash = hashString(name);
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
+
+function getAvatarColor(bg: string): string {
+  return AVATAR_COLOR_MAP[bg] ?? "#333333";
+}
+
+function calculateAge(birthDate: string): number {
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age < 0 ? 0 : age;
+}
+
+interface KidCardProps {
+  child: {
+    id: string;
+    full_name: string;
+    birth_date: string;
+    allergy_tags: string[] | null;
+    room_id: string;
+  };
+  roomName: string;
+  noParentsPlaceholder?: boolean;
+}
+
+export default function KidCard({ child, noParentsPlaceholder }: KidCardProps) {
+  const avatarBg = getAvatarBg(child.full_name);
+  const avatarColor = getAvatarColor(avatarBg);
+  const initial = child.full_name.charAt(0).toUpperCase();
+  const age = calculateAge(child.birth_date);
+  const hasAllergies = child.allergy_tags && child.allergy_tags.length > 0;
+  const firstAllergy = hasAllergies ? child.allergy_tags![0] : null;
 
   let badge = null;
-  if (firstAllergy) {
-    const colors = ALLERGY_BADGE[firstAllergy];
+  if (hasAllergies && firstAllergy) {
     badge = (
       <span
         style={{
@@ -21,14 +75,14 @@ export default function KidCard({ kid }: KidCardProps) {
           fontWeight: 800,
           padding: "5px 9px",
           borderRadius: 999,
-          background: colors.bg,
-          color: colors.color,
+          background: "#FBD8CC",
+          color: "#D9684A",
         }}
       >
-        {firstAllergy === "peanut" ? "MANÍ" : firstAllergy === "lactose" ? "LACTOSA" : "GLUTEN"}
+        {firstAllergy.toUpperCase()}
       </span>
     );
-  } else if (noParents) {
+  } else if (noParentsPlaceholder) {
     badge = (
       <span
         style={{
@@ -49,7 +103,7 @@ export default function KidCard({ kid }: KidCardProps) {
 
   return (
     <Link
-      href={`/kids/${kid.id}`}
+      href={`/kids/${child.id}`}
       className="kid flex items-center gap-[14px] min-w-0 bg-surface border border-[#ECE0D0] rounded-[18px] p-4 shadow-[0_4px_14px_-12px_rgba(120,90,60,.5)] transition-[.15s] hover:border-[#F2A78E] hover:translate-y-[-2px]"
     >
       <div
@@ -57,8 +111,8 @@ export default function KidCard({ kid }: KidCardProps) {
           width: 48,
           height: 48,
           borderRadius: "50%",
-          background: kid.avatarBg,
-          color: kid.avatarColor,
+          background: avatarBg,
+          color: avatarColor,
           fontFamily: "var(--font-fredoka)",
           fontWeight: 600,
           fontSize: 19,
@@ -68,16 +122,16 @@ export default function KidCard({ kid }: KidCardProps) {
           flex: "none",
         }}
       >
-        {kid.initial}
+        {initial}
       </div>
       <div className="flex-1 min-w-0">
         <div
           className="font-headings font-semibold text-[16px] text-foreground"
         >
-          {kid.fullName}
+          {child.full_name}
         </div>
         <div className="text-[13px] text-[#A89A8B]">
-          {kid.age} años · {parentCountLabel(kid.linkedParents)}
+          {age} años · sin padres vinculados
         </div>
       </div>
       {badge}

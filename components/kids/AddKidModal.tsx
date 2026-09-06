@@ -1,31 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Kid } from "@/app/_data/kids";
-import {
-  randomAvatarBg,
-  randomAvatarColor,
-  generateKidId,
-  calculateAge,
-  formatBirthDateDisplay,
-  parseAllergyText,
-} from "@/app/_data/kids";
-
-const MONTHS_ES = [
-  "ene", "feb", "mar", "abr", "may", "jun",
-  "jul", "ago", "sep", "oct", "nov", "dic",
-];
+import type { Room } from "@/types/supabase";
 
 interface AddKidModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (kid: Kid) => void;
+  onAdd: (data: {
+    full_name: string;
+    birth_date: string;
+    room_id: string;
+    enrolled_at: string;
+    medical_notes?: string;
+    allergy_tags?: string[];
+  }) => void;
+  rooms: Room[];
 }
 
-export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) {
+export default function AddKidModal({ open, onClose, onAdd, rooms }: AddKidModalProps) {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [room, setRoom] = useState("");
+  const [roomId, setRoomId] = useState("");
   const [allergies, setAllergies] = useState("");
   const [medicalNotes, setMedicalNotes] = useState("");
 
@@ -92,7 +87,7 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
   function resetForm() {
     setFullName("");
     setBirthDate("");
-    setRoom("");
+    setRoomId("");
     setAllergies("");
     setMedicalNotes("");
     setErrors({ fullName: "", birthDate: "", room: "" });
@@ -106,36 +101,32 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
   function handleSave() {
     const nameErr = !fullName.trim() ? "El nombre es obligatorio" : "";
     const dateErr = validateDate(birthDate);
-    const roomErr = !room ? "La sala es obligatoria" : "";
+    const roomErr = !roomId ? "La sala es obligatoria" : "";
 
     setErrors({ fullName: nameErr, birthDate: dateErr, room: roomErr });
     if (nameErr || dateErr || roomErr) return;
 
-    const parts = fullName.trim().split(/\s+/);
-    const firstName = parts[0] || "";
-    const lastName = parts.slice(1).join(" ");
+    const parts = birthDate.split("/");
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    const birthDateISO = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
     const now = new Date();
-    const enrollmentDate = `${MONTHS_ES[now.getMonth()]} ${now.getFullYear()}`;
+    const enrollmentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
-    const newKid: Kid = {
-      id: generateKidId(fullName),
-      firstName,
-      lastName,
-      fullName: fullName.trim(),
-      initial: fullName.trim().charAt(0).toUpperCase(),
-      age: calculateAge(birthDate),
-      room,
-      birthDate: formatBirthDateDisplay(birthDate),
-      enrollmentDate,
-      allergies: parseAllergyText(allergies),
-      medicalNotes,
-      linkedParents: [],
-      avatarBg: randomAvatarBg(),
-      avatarColor: randomAvatarColor(),
-    };
+    const allergyTags = allergies
+      ? allergies.split(/[,;]+/).map((s) => s.trim()).filter(Boolean)
+      : [];
 
-    onAdd(newKid);
+    onAdd({
+      full_name: fullName.trim(),
+      birth_date: birthDateISO,
+      room_id: roomId,
+      enrolled_at: enrollmentDate,
+      medical_notes: medicalNotes || undefined,
+      allergy_tags: allergyTags.length > 0 ? allergyTags : undefined,
+    });
     resetForm();
     onClose();
   }
@@ -205,17 +196,19 @@ export default function AddKidModal({ open, onClose, onAdd }: AddKidModalProps) 
               </div>
               <div className="relative">
                 <select
-                  value={room}
+                  value={roomId}
                   onChange={(e) => {
-                    setRoom(e.target.value);
+                    setRoomId(e.target.value);
                     if (errors.room) setErrors((prev) => ({ ...prev, room: "" }));
                   }}
                   className={`w-full appearance-none px-[16px] py-[13px] rounded-[14px] border bg-white text-[15px] text-foreground font-bold pr-[40px] ${errors.room ? "border-red-500" : "border-[#EADFD0]"}`}
                 >
                   <option value="" disabled>Seleccionar</option>
-                  <option value="Soles">Soles</option>
-                  <option value="Estrellas">Estrellas</option>
-                  <option value="Arcoíris">Arcoíris</option>
+                  {rooms.map((room) => (
+                    <option key={room.id} value={room.id}>
+                      {room.name}
+                    </option>
+                  ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-[14px] flex items-center">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B0A290" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
