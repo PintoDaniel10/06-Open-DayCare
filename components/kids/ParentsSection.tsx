@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import type { Kid, LinkedParent } from "@/app/_data/kids";
+import type { Child } from "@/types/supabase";
 import { PARENT_STATUS_BADGE, PARENT_STATUS_LABEL } from "@/app/_data/kids";
+import type { LinkedParent } from "@/app/_data/kids";
 import { PlusIcon } from "@/components/shared/icons";
 import LinkParentModal from "@/components/kids/LinkParentModal";
 
 interface ParentsSectionProps {
-  kid: Kid;
+  child: Child;
 }
 
-export default function ParentsSection({ kid }: ParentsSectionProps) {
+export default function ParentsSection({ child }: ParentsSectionProps) {
   const [showLinkParent, setShowLinkParent] = useState(false);
-  const [linkedParents, setLinkedParents] = useState(kid.linkedParents);
+  const [linkedParents, setLinkedParents] = useState<LinkedParent[]>([]);
 
   function handleLink(parent: LinkedParent) {
     setLinkedParents((prev) => [...prev, parent]);
@@ -87,7 +88,7 @@ export default function ParentsSection({ kid }: ParentsSectionProps) {
 
       <LinkParentModal
         open={showLinkParent}
-        kidName={kid.fullName}
+        kidName={child.full_name}
         onClose={() => setShowLinkParent(false)}
         onLink={handleLink}
       />
